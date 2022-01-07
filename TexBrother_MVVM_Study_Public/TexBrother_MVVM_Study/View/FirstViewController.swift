@@ -15,7 +15,7 @@ import Then
 // MARK: - FirstViewController
 
 final class FirstViewController: BaseViewController {
-
+    
     // MARK: - Components
     
     private let firstButton = UIButton().then {
@@ -140,6 +140,51 @@ extension FirstViewController {
             buttonClicked: buttonClickSubject,
             textFieldString: textSubject
         )
-        // TODO
+        let output = viewModel.transform(input: input)
+        
+        output.selectedButton
+            .map{ $0?.buttonInfo }
+            .drive(buttonLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.selectedButton
+            .map{ $0?.buttonNumber == 1 }
+            .drive(firstButton.rx.isSelected)
+            .disposed(by: disposeBag)
+        
+        output.selectedButton
+            .map{ $0?.buttonNumber == 2 }
+            .drive(secondButton.rx.isSelected)
+            .disposed(by: disposeBag)
+        
+        output.selectedButton
+            .map{ $0?.buttonNumber == 3 }
+            .drive(thirdButton.rx.isSelected)
+            .disposed(by: disposeBag)
+        
+        output.textCount
+            .map{ String($0 ?? 0) }
+            .drive(countLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        firstButton.rx.tap
+            .map{ return 1 }
+            .bind(to: buttonClickSubject)
+            .disposed(by: disposeBag)
+        
+        secondButton.rx.tap
+            .map{ return 2 }
+            .bind(to: buttonClickSubject)
+            .disposed(by: disposeBag)
+        
+        thirdButton.rx.tap
+            .map{return 3}
+            .bind(to: buttonClickSubject)
+            .disposed(by: disposeBag)
+        
+        countTextField.rx.text.orEmpty
+            .bind(to: textSubject)
+            .disposed(by: disposeBag)
+        
     }
 }
