@@ -63,8 +63,10 @@ extension SecondViewModel {
                 return false
             }
         
-        let register = Observable.combineLatest(registerModel, enabled)
-            .map { model, enable -> RegisterModel in
+        let register = Observable.combineLatest(input.registerBtnClicked,
+                                                registerModel,
+                                                enabled)
+            .map { _, model, enable -> RegisterModel in
                 
                 if enable {
                     return model
