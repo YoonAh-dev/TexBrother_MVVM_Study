@@ -232,6 +232,9 @@ extension SecondViewController {
             .disposed(by: disposeBag)
         
         output.registerResult
+            .filter { model in
+                model.email != "" && model.passWord != "" && model.nickName != "" && model.privacy
+            }
             .bind{[weak self] model in
                 self?.statusLabel.text = """
             아이디 : \(model.email)

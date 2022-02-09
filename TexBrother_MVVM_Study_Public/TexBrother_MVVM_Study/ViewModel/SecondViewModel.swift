@@ -41,10 +41,7 @@ extension SecondViewModel {
                                          promotion: promotion)
                 return temp
             }
-        
-        // TODO - validate using regex
-        // HINT - CombineLatest, flatMapLatest
-        
+
         let enabled = Observable.combineLatest(input.emailText,
                                                input.passwordText,
                                                input.nickNameText,
@@ -58,7 +55,7 @@ extension SecondViewModel {
                 
                 if let _ = emailRegex?.firstMatch(in: email, options: [], range: NSRange(location: 0, length: email.count)),
                    let _ = passwordRegex?.firstMatch(in: password, options: [], range: NSRange(location: 0, length: password.count)) {
-                    if nickname.count > 1 {
+                    if nickname.count > 1, privacy {
                         return true
                     }
                 }
