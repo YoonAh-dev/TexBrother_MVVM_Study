@@ -200,20 +200,26 @@ extension ThirdViewController {
             .bind(onNext: { emails in
                 self.sections =
                 [ SectionModel<String, EmailModel>(model: "first section", items: emails) ]
-                print(self.sections)
                 datasourceSubject.onNext(self.sections)
             })
+            .disposed(by: disposeBag)
+        
+        datasourceSubject
+            .bind(to: emailTableView.rx.items(dataSource: emailDataSource))
             .disposed(by: disposeBag)
         
         viewModel.state.currentItems.bind {
             print($0)
         }.disposed(by: disposeBag)
         
-        loadViewTrigger.onNext(())
+        emailTableView.rx.observeWeakly(CGSize.self, "contentSize")
+            .compactMap{$0?.height}
+            .distinctUntilChanged()
+            .bind {[weak self] height in
+                self?.relayout(height: height)
+            }.disposed(by: disposeBag)
         
-        datasourceSubject
-            .bind(to: emailTableView.rx.items(dataSource: emailDataSource))
-            .disposed(by: disposeBag)
+        loadViewTrigger.onNext(())
     }
     
     private var emailDataSource: EmailDataSource {
@@ -223,7 +229,6 @@ extension ThirdViewController {
                 cell.backgroundColor = .orange
                 return cell
             }
-            
             return UITableViewCell()
         }
         
