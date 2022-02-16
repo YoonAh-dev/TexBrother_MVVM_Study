@@ -9,12 +9,16 @@ import UIKit
 
 import RxSwift
 import RxCocoa
+import RxDataSources
 import SnapKit
 import Then
 
 // MARK: - ThirdViewController
 
 final class ThirdViewController: BaseViewController {
+    
+    typealias EmailSectionModel = SectionModel<String, EmailModel>
+    typealias EmailDataSource = RxTableViewSectionedReloadDataSource<EmailSectionModel>
     
     // MARK: - Lazy Components
     
@@ -71,13 +75,16 @@ final class ThirdViewController: BaseViewController {
     private let loadViewTrigger = PublishSubject<Void>()
     private let viewModel = ThirdViewModel()
     
+    var sections: [EmailSectionModel] = []
+    
     // MARK: - LifeCycles
     
     override func viewDidLoad() {
         super.viewDidLoad()
         register()
         layout()
-        bind()
+//        bind()
+        datasourceTableView()
     }
 }
 
@@ -171,5 +178,57 @@ extension ThirdViewController {
         }.disposed(by: disposeBag)
         
         loadViewTrigger.onNext(())
+    }
+    
+    private func datasourceTableView() {
+        let deleteItem = Observable.zip(
+            emailTableView.rx.itemSelected.asObservable(),
+            emailTableView.rx.modelSelected(EmailModel.self).asObservable()
+        )
+        
+        let input = ThirdViewModel.Input(
+            loadView: loadViewTrigger,
+            newContent: emailTextField.rx.text.orEmpty.asObservable(),
+            addContent: addButton.rx.tap.asObservable(),
+            deleteContent: deleteItem,
+            deleteAll: deleteButton.rx.tap.asObservable()
+        )
+        
+        let datasourceSubject = PublishSubject<[EmailSectionModel]>()
+        let output = viewModel.transform(input: input)
+        output.tableViewItems
+            .bind(onNext: { emails in
+                self.sections =
+                [ SectionModel<String, EmailModel>(model: "first section", items: emails) ]
+                print(self.sections)
+                datasourceSubject.onNext(self.sections)
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.state.currentItems.bind {
+            print($0)
+        }.disposed(by: disposeBag)
+        
+        loadViewTrigger.onNext(())
+        
+        datasourceSubject
+            .bind(to: emailTableView.rx.items(dataSource: emailDataSource))
+            .disposed(by: disposeBag)
+    }
+    
+    private var emailDataSource: EmailDataSource {
+        let configureCell: (TableViewSectionedDataSource<EmailSectionModel>, UITableView, IndexPath, EmailModel) -> UITableViewCell = { datasource, tableView, indexPath, element in
+            if let cell = tableView.dequeueReusableCell(withIdentifier: EmailTableViewCell.identifier) as? EmailTableViewCell {
+//                cell.bind(model: )
+                cell.backgroundColor = .orange
+                return cell
+            }
+            
+            return UITableViewCell()
+        }
+        
+        let datasource = EmailDataSource.init(configureCell: configureCell)
+        
+        return datasource
     }
 }
