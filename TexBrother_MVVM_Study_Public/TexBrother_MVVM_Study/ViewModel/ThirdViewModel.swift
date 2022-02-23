@@ -20,7 +20,6 @@ final class ThirdViewModel {
         let newContent: Observable<String>
         let addContent: Observable<Void>
         let deleteContent: Observable<(IndexPath, EmailModel)>
-        
         let deleteAll: Observable<Void>
     }
     struct Output {
