@@ -22,6 +22,9 @@ final class ViewController: UIViewController {
     
     private let viewModel = ViewModel()
     private let didTapSaveButton = PublishSubject<(String, String)>()
+    private let ageTextFieldSubject = BehaviorSubject<Bool>(value: false)
+    private let nameTextFieldSubject = BehaviorSubject<Bool>(value: false)
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +53,22 @@ final class ViewController: UIViewController {
                 else { return }
                 self?.didTapSaveButton.onNext((ageText, nameText))
             })
+            .disposed(by: disposeBag)
+        
+        ageTextField.rx.text.orEmpty
+            .bind(onNext: { [weak self] in
+                self?.ageTextFieldSubject.onNext(($0 == "") ? false : true)
+            })
+            .disposed(by: disposeBag)
+        
+        nameTextField.rx.text.orEmpty
+            .bind(onNext: { [weak self] in
+                self?.nameTextFieldSubject.onNext(($0 == "") ? false : true)
+            })
+            .disposed(by: disposeBag)
+        
+        Observable.combineLatest(ageTextFieldSubject, nameTextFieldSubject) { $0 && $1 }
+            .bind(to: saveButton.rx.isEnabled)
             .disposed(by: disposeBag)
     }
     
