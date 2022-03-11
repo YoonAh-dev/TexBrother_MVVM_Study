@@ -17,6 +17,9 @@
 		EDD1BCB927C5D1F000148852 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = EDD1BCB827C5D1F000148852 /* RxSwift */; };
 		EDE2971927CE84FD00FB2595 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE2971827CE84FD00FB2595 /* Person.swift */; };
 		EDE2971B27CE87A100FB2595 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE2971A27CE87A100FB2595 /* ViewModel.swift */; };
+		EDEBDDF227DB785B00E5D91B /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDEBDDF127DB785B00E5D91B /* TableViewController.swift */; };
+		EDEBDDF427DB7A2300E5D91B /* TableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDEBDDF327DB7A2300E5D91B /* TableViewModel.swift */; };
+		EDEBDDF627DB7B7C00E5D91B /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDEBDDF527DB7B7C00E5D91B /* TableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +33,9 @@
 		EDD1BCAF27C5D1C700148852 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EDE2971827CE84FD00FB2595 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		EDE2971A27CE87A100FB2595 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		EDEBDDF127DB785B00E5D91B /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		EDEBDDF327DB7A2300E5D91B /* TableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewModel.swift; sourceTree = "<group>"; };
+		EDEBDDF527DB7B7C00E5D91B /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +75,9 @@
 				EDD1BCA327C5D1C600148852 /* SceneDelegate.swift */,
 				EDD1BCA527C5D1C600148852 /* ViewController.swift */,
 				EDE2971A27CE87A100FB2595 /* ViewModel.swift */,
+				EDEBDDF127DB785B00E5D91B /* TableViewController.swift */,
+				EDEBDDF327DB7A2300E5D91B /* TableViewModel.swift */,
+				EDEBDDF527DB7B7C00E5D91B /* TableViewCell.swift */,
 				EDD1BCA727C5D1C600148852 /* Main.storyboard */,
 				EDD1BCAA27C5D1C700148852 /* Assets.xcassets */,
 				EDD1BCAC27C5D1C700148852 /* LaunchScreen.storyboard */,
@@ -164,6 +173,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				EDE2971B27CE87A100FB2595 /* ViewModel.swift in Sources */,
+				EDEBDDF627DB7B7C00E5D91B /* TableViewCell.swift in Sources */,
+				EDEBDDF427DB7A2300E5D91B /* TableViewModel.swift in Sources */,
+				EDEBDDF227DB785B00E5D91B /* TableViewController.swift in Sources */,
 				EDD1BCA627C5D1C600148852 /* ViewController.swift in Sources */,
 				EDD1BCA227C5D1C600148852 /* AppDelegate.swift in Sources */,
 				EDE2971927CE84FD00FB2595 /* Person.swift in Sources */,
