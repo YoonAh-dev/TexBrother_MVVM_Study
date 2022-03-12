@@ -25,13 +25,13 @@ final class TableViewCell: UITableViewCell {
         contentView.addSubview(nameLabel)
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.addConstraints([
+        NSLayoutConstraint.activate([
             nameLabel.centerXAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerXAnchor),
             nameLabel.centerYAnchor.constraint(equalTo: self.safeAreaLayoutGuide.centerYAnchor)
         ])
     }
     
-    func bind(model: String) {
-        nameLabel.text = model
+    func bind(model: Person) {
+        nameLabel.text = model.name
     }
 }

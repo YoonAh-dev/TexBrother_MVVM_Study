@@ -10,44 +10,62 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-final class TableViewController: UITableViewController {
+final class TableViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: - properties
     
     private let disposeBag = DisposeBag()
     
-    private let textField: UITextField = {
+    private let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.rowHeight = 30
+        tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.identifier)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
+    private lazy var textField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "이름을 입력해주세요"
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.delegate = self
         return textField
     }()
     private let viewModel = TableViewModel()
-    private var sections: [Person] = []
-    let cities = Observable.of(["Lisbon", "Copenhagen", "London", "Madrid", "Vienna"])
+    private var textfieldSubject = BehaviorSubject<String>(value: "")
     
     // MARK: - life cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configUI()
+        render()
         bind()
+        bindInput()
     }
     
     // MARK: - func
     
-    private func configUI() {
-        tableView.delegate = nil
-        tableView.rowHeight = 30
-        tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.identifier)
+    private func render() {
+        view.addSubview(tableView)
+        view.addSubview(textField)
+        
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            textField.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -300),
+            textField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            textField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        ])
     }
     
     private func bind() {
         let input = TableViewModel.Input(
-            newContent: textField.rx.text.orEmpty.asObservable()
+            newContent: textfieldSubject
         )
         
         let output = viewModel.transform(input: input)
-        cities
+        output.tableViewItems
             .bind(to: tableView.rx.items(
                 cellIdentifier: TableViewCell.identifier,
                 cellType: TableViewCell.self)
@@ -56,5 +74,14 @@ final class TableViewController: UITableViewController {
             }
             .disposed(by: disposeBag)
     }
-
+    
+    private func bindInput() {
+        textField.rx.controlEvent(.editingDidEndOnExit).asDriver()
+            .drive(onNext: { [weak self] in
+                if let text = self?.textField.text {
+                    self?.textfieldSubject.onNext(text)
+                }
+            })
+            .disposed(by: disposeBag)
+    }
 }

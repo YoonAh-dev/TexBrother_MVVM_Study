@@ -33,7 +33,7 @@ extension TableViewModel {
             .map { name -> [Person] in
                 let newPerson = Person(name: name, age: 25)
                 self.state.currentItems.onNext([newPerson])
-                return [newPerson]
+                return try self.state.currentItems.value()
             }
         
         return Output(tableViewItems: personResult)
