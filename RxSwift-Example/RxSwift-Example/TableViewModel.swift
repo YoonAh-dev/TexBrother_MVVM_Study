@@ -24,6 +24,7 @@ final class TableViewModel {
     }
     
     var state = State()
+    var stateArray: [Person] = []
 }
 
 extension TableViewModel {
@@ -32,7 +33,8 @@ extension TableViewModel {
             .distinctUntilChanged()
             .map { name -> [Person] in
                 let newPerson = Person(name: name, age: 25)
-                self.state.currentItems.onNext([newPerson])
+                self.stateArray.append(newPerson)
+                self.state.currentItems.onNext(self.stateArray)
                 return try self.state.currentItems.value()
             }
         
